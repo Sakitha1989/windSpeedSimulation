@@ -10,9 +10,11 @@
 
 ReadingFiles <- function(numStations, numObs, numMonths, numDays){
   
-  xt = matrix(0,numObs,numStations*numMonths*numDays) # de-trended time series
-  ut = matrix(0,numObs,numStations*numMonths*numDays) # trend component of the time series
-  yt = matrix(0,numObs,numStations*numMonths*numDays) # original time series
+  numSeasons <- 4
+  
+  xt = matrix(0,numObs,numStations*numMonths*numDays*numSeasons) # de-trended time series
+  ut = matrix(0,numObs,numStations*numMonths*numDays*numSeasons) # trend component of the time series
+  yt = matrix(0,numObs,numStations*numMonths*numDays*numSeasons) # original time series
   
   selectedMonths <- rep(0,numMonths)
   selectedDays <- rep(0,numDays)

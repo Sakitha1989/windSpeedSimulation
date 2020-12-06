@@ -8,7 +8,7 @@
 
 #------------------------ Parametric simulation -----------------------------#
 
-parametricSimulation <- function(data, changePoints, trendData, numObs, numStations, numSimulations){
+parametricSimulation <- function(data, changePoints, numObs, numStations, numSimulations){
 
   simSamples = array( 0 , c(numSimulations, numObs, numStations) )
   for (j in 1: numSimulations) {
@@ -24,7 +24,7 @@ parametricSimulation <- function(data, changePoints, trendData, numObs, numStati
       residualSeries <- rbind(residualSeries, simTS)
     }
 
-    simSamples[j,,] <- residualSeries+trendData
+    simSamples[j,,] <- residualSeries+data$ut
   }
   
   return(simSamples)
