@@ -41,8 +41,12 @@ nonParametricSimulations <- nonParametricSimulation(decompseData, changePoints, 
 write.csv(nonParametricSimulations,"C:\\Users\\sakit\\Documents\\Academic\\Research\\StatisticalModeling\\WindSpeedDataAnalysisNREL\\Codes\\windSpeedSimulation\\windSpeedSimulation\\Output\\nonParametricSimulation.csv", row.names = TRUE)
 
 # testing simulated data
-seriesNumber <- 150
+seriesNumber <- 1
 parametricSimChangePoints <- testingSimulations(parametricSimulations, seriesNumber, numStations, alpha)
 nonParametricSimChangePoints <- testingSimulations(nonParametricSimulations, seriesNumber, numStations, alpha)
   
-  
+#plotting
+plot.ts(decompseData$original, main = "Original series")
+plot.ts(parametricSimulations[seriesNumber,,], main = "Parametric simulated series")
+plot.ts(nonParametricSimulations[seriesNumber,,], main = "Non-parametric simulated series")
+
