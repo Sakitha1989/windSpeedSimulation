@@ -8,12 +8,12 @@
 
 #------------------------ Non-Parametric simulation -----------------------------#
 
-nonParametricSimulation <- function(data, changePoints, trendData, numStations, numObs, numSimulations){
+nonParametricSimulation <- function(data, changePoints, numStations, numObs, numSimulations){
   
   simSamples = array( 0 , c(numSimulations, numObs, numStations) )
   simSeries <- NULL
   for (i in 1:(length(changePoints)-1)) {
-    stationarySegment <- data[changePoints[i]:changePoints[i+1],] 
+    stationarySegment <- data$residual[changePoints[i]:changePoints[i+1],] 
     
     # Optimal Block length Selection: Politis and White (2004)
     optimalBlockLengths<-b.star(stationarySegment, round=TRUE)[,1]
@@ -27,7 +27,7 @@ nonParametricSimulation <- function(data, changePoints, trendData, numStations, 
     bootSamples = array( 0 , c(numSimulations, nrow(stationarySegment), numStations) )
     for(j in 1:numSimulations) {
       tmp = data.frame( bootSegments$sample[[j]] )
-      bootSamples[j,,] = as.matrix(tmp, nrow(stationarySegment), numStations) + trendData[changePoints[i]:changePoints[i+1],]
+      bootSamples[j,,] = as.matrix(tmp, nrow(stationarySegment), numStations) + data$trend[changePoints[i]:changePoints[i+1],]
     }
     simSeries <- abind(simSeries, bootSamples, along = 2)
   }

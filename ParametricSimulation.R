@@ -9,14 +9,14 @@
 #------------------------ Parametric simulation -----------------------------#
 
 parametricSimulation <- function(data, changePoints, numObs, numStations, numSimulations){
-
+  
   simSamples = array( 0 , c(numSimulations, numObs, numStations) )
   for (j in 1: numSimulations) {
   selectOrder <- rep(0,length(changePoints)-1)
     residualSeries <- NULL
     for (i in 1:(length(changePoints)-1)) {
-      selectOrder[i] <- min(VARselect(data[changePoints[i]:changePoints[i+1]-1,], type = "const", lag.max = 10)$selection)
-      varModel <- vars::VAR(data,p=selectOrder[i], type = "const")
+      selectOrder[i] <- min(VARselect(data$residual[changePoints[i]:changePoints[i+1]-1,], type = "const", lag.max = 10)$selection)
+      varModel <- vars::VAR(data$residual[changePoints[i]:changePoints[i+1]-1,],p=selectOrder[i], type = "const")
       simSeries <- varSimulate(varModel = varModel, simLength = numSimulations, lookaheadPeriods = 50, numScenarios = 1)
       
       index <- sample(1:length(simSeries[,1,1]), if(i==1) {changePoints[i+1] - changePoints[i]+1} else {changePoints[i+1] - changePoints[i]}, replace=FALSE)
@@ -24,7 +24,7 @@ parametricSimulation <- function(data, changePoints, numObs, numStations, numSim
       residualSeries <- rbind(residualSeries, simTS)
     }
 
-    simSamples[j,,] <- residualSeries+data$ut
+    simSamples[j,,] <- residualSeries+data$original
   }
   
   return(simSamples)
