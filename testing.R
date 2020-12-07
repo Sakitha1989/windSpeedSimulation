@@ -1,5 +1,5 @@
 ##############################################################################
-# ReadingFiles.R                                                             #
+# Testing.R                                                                  #
 #                                                                            #
 # Created on: Dec 6, 2020                                                    #
 # Author: Skitha Ariyarathne                                                 #
