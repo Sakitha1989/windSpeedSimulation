@@ -26,7 +26,7 @@ testingSimulations <- function(simData,seriesNumber, numStations, alpha){
   SimulatedData <- list("original" = yt, "trend" = ut, "residual" = xt)
   
   changePoints <- cpt.locations.multi(SimulatedData$residual[,c(1:numStations)],alpha)
-  changePoints <- append(changePoints, c(1,numObs), after = length(changePoints))
+  changePoints <- append(changePoints, c(1,length(simData[seriesNumber,,s])), after = length(changePoints))
   changePoints <- sort(changePoints)
   
   return(changePoints)

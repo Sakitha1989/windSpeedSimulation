@@ -33,7 +33,7 @@ changePoints <- sort(changePoints)
 
 # parametric simulation
 parametricSimulations <- parametricSimulation(decompseData, changePoints, numObs, numStations, numSimulations)
-colnames(parametricSimulations) <- c(paste0("S1.",1:288),paste0("S2.",1:288),paste0("S3.",1:288),paste0("S4.",1:288),paste0("S5.",1:288))
+#colnames(parametricSimulations) <- c(paste0("S1.",1:288),paste0("S2.",1:288),paste0("S3.",1:288),paste0("S4.",1:288),paste0("S5.",1:288))
 write.csv(parametricSimulations,"C:\\Users\\sakit\\Documents\\Academic\\Research\\StatisticalModeling\\WindSpeedDataAnalysisNREL\\Codes\\windSpeedSimulation\\windSpeedSimulation\\Output\\parametricSimulation.csv", row.names = TRUE)
 
 # non-parametric simulation
@@ -41,7 +41,8 @@ nonParametricSimulations <- nonParametricSimulation(decompseData, changePoints, 
 write.csv(nonParametricSimulations,"C:\\Users\\sakit\\Documents\\Academic\\Research\\StatisticalModeling\\WindSpeedDataAnalysisNREL\\Codes\\windSpeedSimulation\\windSpeedSimulation\\Output\\nonParametricSimulation.csv", row.names = TRUE)
 
 # testing simulated data
-seriesNumber <- 1
-simChangePoints <- testingSimulations(parametricSimulations, seriesNumber, numStations, alpha)
+seriesNumber <- 150
+parametricSimChangePoints <- testingSimulations(parametricSimulations, seriesNumber, numStations, alpha)
+nonParametricSimChangePoints <- testingSimulations(nonParametricSimulations, seriesNumber, numStations, alpha)
   
   
