@@ -40,5 +40,8 @@ write.csv(parametricSimulations,"C:\\Users\\sakit\\Documents\\Academic\\Research
 nonParametricSimulations <- nonParametricSimulation(decompseData, changePoints, numStations, numObs, numSimulations)
 write.csv(nonParametricSimulations,"C:\\Users\\sakit\\Documents\\Academic\\Research\\StatisticalModeling\\WindSpeedDataAnalysisNREL\\Codes\\windSpeedSimulation\\windSpeedSimulation\\Output\\nonParametricSimulation.csv", row.names = TRUE)
 
+# testing simulated data
+seriesNumber <- 1
+simChangePoints <- testingSimulations(parametricSimulations, seriesNumber, numStations, alpha)
   
   
