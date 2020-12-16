@@ -47,7 +47,7 @@ ReadingFiles <- function(numStations, numObs, numMonths, numDays){
       } 
     }
   }
-  decompseData <- list("original" = yt, "trend" = ut, "residual" = xt)
+  decompseData <- list("original" = yt, "trend" = ut, "residual" = xt, "Months" = selectedMonths, "Days" = selectedDays)
   return(decompseData)
   
 }
