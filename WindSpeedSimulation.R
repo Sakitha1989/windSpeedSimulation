@@ -15,6 +15,9 @@ library(tseries)
 library(abind)
 #library(smooth)
 
+# directory
+setwd("~/Academic/Research/StatisticalModeling/WindSpeedDataAnalysisNREL/Codes/windSpeedSimulation/windSpeedSimulation/Data")
+
 numStations <- 5
 numObs <- 288
 numMonths <- 1

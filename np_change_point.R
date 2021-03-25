@@ -32,7 +32,7 @@ library(Matrix)
 # p>1 denotes the dimension of the series
 # n is the series length
 
-# sig.level: choice of significance leel to be used for the test
+# sig.level: choice of significance level to be used for the test
  
 ####################################################################################
 
@@ -69,7 +69,7 @@ vecdiff=function(data1,time.pt,cdl){
   sum1=0
   for(i in 1:N){
     sum1=sum1+
-      cxnorm(matrix(tt[[1]][,,i]-tt[[2]][,,i],p*p,1))  
+      cxnorm(matrix(tt[[1]][,,i]-tt[[2]][,,i],p*p,1))  # expression 6
   }
   
   return(sum1/N)
@@ -159,7 +159,7 @@ return(pval)
 
 cpt.locations.single = function(data1,cdl,sig.level=0.05){
 
-  N = 2^cdl # length of dyadic neighborhood length N
+  N = 2^cdl # length of dyadic neighborhood length N     cdl = g(T)
   
   p=dim(data1)[2] # Dimension of series 
   
@@ -221,7 +221,7 @@ cpt.locations.multi = function(data1,sig.level=0.05){
   ############################################ where the bounds coming from?
   
   # Choices for neighborhood lengths: See Section 2.3.1 of paper
-  N.choices = N.choices[which(N.choices >lo & N.choices<up )]
+  N.choices = N.choices[which(N.choices >lo & N.choices<up )] #expression 7: 2^(li)
   
   final.cpts = NULL # final list of detected change points
   
@@ -229,7 +229,7 @@ cpt.locations.multi = function(data1,sig.level=0.05){
   cpts = matrix(0,length(N.choices),1000)
   
   for(k in 1:length(N.choices)){
-    cpts.tmp = cpt.locations.single(data1,cdl=log(N.choices[k],base=2))
+    cpts.tmp = cpt.locations.single(data1,cdl=log(N.choices[k],base=2)) 
     if(length(cpts.tmp>0)) cpts[k,1:length(cpts.tmp)] =  cpts.tmp   
     }
   
