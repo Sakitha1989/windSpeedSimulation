@@ -32,7 +32,8 @@ ReadingFiles <- function(numStations, numObs, numMonths, numDays){
       {
         x <-  read.csv(fnm[s] , skip = 3 , header=T)
       
-        indx <-  which(x$Month==selectedMonths[m] & x$Day==selectedDays[d] )
+        #indx <-  which(x$Month==selectedMonths[m] & x$Day==selectedDays[d] )
+        indx <-  which(x$Month==7 & x$Day==25 )
       
         y <-  x[indx,7] # wind speed
       

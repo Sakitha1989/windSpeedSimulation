@@ -33,6 +33,7 @@ decompseData <- ReadingFiles(numStations, numObs, numMonths, numDays)
 changePoints <- cpt.locations.multi(decompseData$residual[,c(1:numStations)],alpha)
 changePoints <- append(changePoints, c(1,numObs), after = length(changePoints))
 changePoints <- sort(changePoints)
+changePoints
 
 # parametric simulation
 parametricSimulations <- parametricSimulation(decompseData, changePoints, numObs, numStations, numSimulations)

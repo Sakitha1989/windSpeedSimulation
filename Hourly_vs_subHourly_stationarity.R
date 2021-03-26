@@ -1,58 +1,38 @@
 data <- read.csv("1-OK.csv", skip = 3 , header=T)
 
-indx1 <-  which(data$Month==1 & data$Day==31)
-indx2 <-  which(data$Month==4 & data$Day==24)
-indx3 <-  which(data$Month==7 & data$Day==11)
-indx4 <-  which(data$Month==9 & data$Day==4)
+indx <-  matrix(0, 288, 12)
+subHourlyData <-  matrix(0, 288, 12)
+hourlyData <- matrix(0, 24, 12)
 
-indx <- data.frame(indx1, indx2, indx3, indx4)
-y <-  matrix(0, dim(indx[1]), 4)
-hourlyDta <- matrix(0, 24, 4)
+subHourlyModel <- vector("list", 1)
+hourlyModel <- vector("list", 1)
+subHourlyPvalue <- vector("numeric", 1)
+hourlyPvalue <- vector("numeric", 1)
 
-subHourlyTrend <- vector("list", 1)
-hourlyTrend <- vector("list", 1)
+days <- c(31,17,5,24,26,13,9,19,21,8,12,24)
 
-for(i in 1:4){
-  y[,i] <- data[indx[,i], 7]
-  dfr <-  data.frame(y[,i],1:length(y[,i]))
+for(i in 1:12){
+  indx[,i] <-  which(data$Month==i & data$Day==days[i])
+  subHourlyData[,i] <- data[indx[,i], 7]
+  dfr <-  data.frame(subHourlyData[,i],1:288)
   names(dfr) <-  c("speed","time")
-  subHourlyTrend[[i]] = loess(speed~-1+time , data = dfr)
+  subHourlyModel[[i]] = loess(speed~-1+time , data = dfr)
+  subHourlyTest <- PP.test(subHourlyModel[[i]]$residuals)
+  subHourlyPvalue[i] <- subHourlyTest$p.value
   
-  hourlyDta[,i] <- rollapply(y[,i], 12, mean, by = 12)
-  Hdfr <-  data.frame(hourlyDta[,i],1:length(hourlyDta[,i]))
+  hourlyData[,i] <- rollapply(subHourlyData[,i], 12, mean, by = 12)
+  Hdfr <-  data.frame(hourlyData[,i],1:length(hourlyData[,i]))
   names(Hdfr) <-  c("speed","time")
-  hourlyTrend[[i]] = loess(speed~-1+time , data = Hdfr)
-
+  hourlyModel[[i]] = loess(speed~-1+time , data = Hdfr)
+  hourlyTest <- PP.test(hourlyModel[[i]]$residuals)
+  hourlyPvalue[i] <- hourlyTest$p.value
 }
 
-# sub-hourly data
-plot.ts(subHourlyTrend[[1]]$residuals)
-PP.test(subHourlyTrend[[1]]$residuals)
-
-# hourly data
-plot.ts(hourlyTrend[[1]]$residuals)
-PP.test(hourlyTrend[[1]]$residuals)
-
-# sub-hourly data
-plot.ts(subHourlyTrend[[2]]$residuals)
-PP.test(subHourlyTrend[[2]]$residuals)
-
-# hourly data
-plot.ts(hourlyTrend[[2]]$residuals)
-PP.test(hourlyTrend[[2]]$residuals)
-
-# sub-hourly data
-plot.ts(subHourlyTrend[[3]]$residuals)
-PP.test(subHourlyTrend[[3]]$residuals)
-
-# hourly data
-plot.ts(hourlyTrend[[3]]$residuals)
-PP.test(hourlyTrend[[3]]$residuals)
-
-# sub-hourly data
-plot.ts(subHourlyTrend[[4]]$residuals)
-PP.test(subHourlyTrend[[4]]$residuals)
-
-# hourly data
-plot.ts(hourlyTrend[[4]]$residuals)
-PP.test(hourlyTrend[[4]]$residuals)
+bars <- rbind(hourlyPvalue, subHourlyPvalue)
+rownames(bars) <-  c("Hourly","Sub-hourly")
+columnNames <-  c("Jan-31","Feb-17","Mar-05","Apr-24","May-26","Jun-13","Jul-09","Aug-19","Sep-21","Oct-08","Nov-12","Dec-24")
+barplot(bars, main="Phillips-Perron Unit Root Test",
+        xlab="Day", ylab="p-value", col=c("darkblue","red"),
+        legend.text = rownames(bars), names.arg = columnNames, las=2, beside=TRUE)
+abline(h=0.05, lty = 2, lwd = 3, col = "grey")
+text(35,0.065,"0.05")
