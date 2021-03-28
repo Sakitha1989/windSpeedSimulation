@@ -31,8 +31,7 @@ for(i in 1:12){
 bars <- rbind(hourlyPvalue, subHourlyPvalue)
 rownames(bars) <-  c("Hourly","Sub-hourly")
 columnNames <-  c("Jan-31","Feb-17","Mar-05","Apr-24","May-26","Jun-13","Jul-09","Aug-19","Sep-21","Oct-08","Nov-12","Dec-24")
-barplot(bars, main="Phillips-Perron Unit Root Test",
-        xlab="Day", ylab="p-value", col=c("darkblue","red"),
+barplot(bars, xlab="Day", ylab="p-value", col=c("darkblue","red"),
         legend.text = rownames(bars), names.arg = columnNames, las=2, beside=TRUE)
 abline(h=0.05, lty = 2, lwd = 3, col = "grey")
 text(35,0.065,"0.05")
