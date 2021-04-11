@@ -9,16 +9,16 @@
 #------------------------ Reading data from file-----------------------------#
 # capable of reading multiple days from one month
 
-ReadingFiles <- function(numStations, numObs, numMonths, numDays){
+ReadingFiles <- function(numStations, numObs, numMonths, numDays, month, day){
   
-  xt = matrix(0,numObs,numStations*numMonths*numDays) # de-trended time series
-  ut = matrix(0,numObs,numStations*numMonths*numDays) # trend component of the time series
-  yt = matrix(0,numObs,numStations*numMonths*numDays) # original time series
+  xt = matrix(0,numObs*numDays,numStations*numMonths) # de-trended time series
+  ut = matrix(0,numObs*numDays,numStations*numMonths) # trend component of the time series
+  yt = matrix(0,numObs*numDays,numStations*numMonths) # original time series
   
   selectedMonths <- rep(0,numMonths)
   selectedDays <- rep(0,numDays)
   
-  fnm = paste0(1:numStations,"-OK.csv")
+  fnm = paste0(1:5,"-OK.csv")
   
   for (m in 1:numMonths)
   {
@@ -30,12 +30,13 @@ ReadingFiles <- function(numStations, numObs, numMonths, numDays){
       
       for(s in 1:numStations)
       {
-        x <-  read.csv(fnm[s] , skip = 3 , header=T)
+        x <-  read.csv(fnm[s] , skip = 1 , header=T)
       
         #indx <-  which(x$Month==selectedMonths[m] & x$Day==selectedDays[d] )
-        indx <-  which(x$Month==7 & x$Day==25 )
+        #indx <-  which(x$Month==11 & (x$Day==13 | x$Day==14) )
+        indx <-  which(x$Month==month & (x$Day==day) )
       
-        y <-  x[indx,7] # wind speed
+        y <-  x[indx,6] # wind speed
       
         # Smoothing and subtracting
         dfr = data.frame(y,1:length(y))

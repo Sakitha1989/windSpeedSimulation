@@ -13,10 +13,19 @@
 library(resamplr)
 library(tseries)
 library(abind)
+library(reshape2)
+library(ggplot2)
 #library(smooth)
 
 # directory
 setwd("~/Academic/Research/StatisticalModeling/WindSpeedDataAnalysisNREL/Codes/windSpeedSimulation/windSpeedSimulation/Data")
+
+# other R scripts
+source('~/Academic/Research/StatisticalModeling/WindSpeedDataAnalysisNREL/Codes/windSpeedSimulation/windSpeedSimulation/ReadingFiles.R')
+source('~/Academic/Research/StatisticalModeling/WindSpeedDataAnalysisNREL/Codes/windSpeedSimulation/windSpeedSimulation/np_change_point.R')
+source('~/Academic/Research/StatisticalModeling/WindSpeedDataAnalysisNREL/Codes/windSpeedSimulation/windSpeedSimulation/ParametricSimulation.R')
+source('~/Academic/Research/StatisticalModeling/WindSpeedDataAnalysisNREL/Codes/windSpeedSimulation/windSpeedSimulation/NonParametricSimulation.R')
+
 
 numStations <- 5
 numObs <- 288
@@ -29,8 +38,15 @@ alpha <- 0.05
 # reading files
 decompseData <- ReadingFiles(numStations, numObs, numMonths, numDays)
 
+# univariate stationary test
+for (i in 1 : ncol(decompseData)) {
+  
+}
+
+
+
 # function returns change point locations
-changePoints <- cpt.locations.multi(decompseData$residual[,c(1:numStations)],alpha)
+changePoints <- cpt.locations.multi(decompseData$residual[1:288,c(1:numStations)],alpha)
 changePoints <- append(changePoints, c(1,numObs), after = length(changePoints))
 changePoints <- sort(changePoints)
 changePoints
@@ -50,7 +66,12 @@ parametricSimChangePoints <- testingSimulations(parametricSimulations, seriesNum
 nonParametricSimChangePoints <- testingSimulations(nonParametricSimulations, seriesNumber, numStations, alpha)
   
 #plotting
-plot.ts(decompseData$original, main = "Original series")
+plot.ts(decompseData$original[,1], main = " ")
+plot.ts(decompseData$residual, main = " ")
 plot.ts(parametricSimulations[seriesNumber,,], main = "Parametric simulated series")
 plot.ts(nonParametricSimulations[seriesNumber,,], main = "Non-parametric simulated series")
 
+plot.ts(decompseData$residual[,5])
+abline(v=c(151,235))
+
+PP.test(decompseData$residual[1:151,5])

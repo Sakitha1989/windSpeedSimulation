@@ -1,4 +1,4 @@
-data <- read.csv("1-OK.csv", skip = 3 , header=T)
+data <- read.csv("4-OK.csv", skip = 1 , header=T)
 
 indx <-  matrix(0, 288, 12)
 subHourlyData <-  matrix(0, 288, 12)
@@ -13,7 +13,7 @@ days <- c(31,17,5,24,26,13,9,19,21,8,12,24)
 
 for(i in 1:12){
   indx[,i] <-  which(data$Month==i & data$Day==days[i])
-  subHourlyData[,i] <- data[indx[,i], 7]
+  subHourlyData[,i] <- data[indx[,i], 6]
   dfr <-  data.frame(subHourlyData[,i],1:288)
   names(dfr) <-  c("speed","time")
   subHourlyModel[[i]] = loess(speed~-1+time , data = dfr)
@@ -35,3 +35,5 @@ barplot(bars, xlab="Day", ylab="p-value", col=c("darkblue","red"),
         legend.text = rownames(bars), names.arg = columnNames, las=2, beside=TRUE)
 abline(h=0.05, lty = 2, lwd = 3, col = "grey")
 text(35,0.065,"0.05")
+
+par(mfrow=c(2,2))

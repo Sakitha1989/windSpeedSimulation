@@ -7,6 +7,7 @@
 ##############################################################################
 
 #------------------------ Non-Parametric simulation -----------------------------#
+library(np)
 
 nonParametricSimulation <- function(data, changePoints, numStations, numObs, numSimulations){
   

@@ -12,7 +12,9 @@ for (i in 1:dim(OutputData)[2]) {
   pool.fit[,i] <- lmf$fitted
 }
 
-poolChangePoints <- cpt.locations.multi(pool.residuals, 0.05)
+changePointDFR <- data.frame(pool.residuals[,c(1,2,5)])
+
+poolChangePoints <- cpt.locations.multi(changePointDFR, 0.05)
 poolChangePoints <- append(poolChangePoints, c(1,dim(OutputData)[1]), after = length(poolChangePoints))
 poolChangePoints <- sort(poolChangePoints)
 poolChangePoints
