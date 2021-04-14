@@ -25,6 +25,7 @@ source('~/Academic/Research/StatisticalModeling/WindSpeedDataAnalysisNREL/Codes/
 source('~/Academic/Research/StatisticalModeling/WindSpeedDataAnalysisNREL/Codes/windSpeedSimulation/windSpeedSimulation/np_change_point.R')
 source('~/Academic/Research/StatisticalModeling/WindSpeedDataAnalysisNREL/Codes/windSpeedSimulation/windSpeedSimulation/ParametricSimulation.R')
 source('~/Academic/Research/StatisticalModeling/WindSpeedDataAnalysisNREL/Codes/windSpeedSimulation/windSpeedSimulation/NonParametricSimulation.R')
+source('~/Academic/Research/StatisticalModeling/WindSpeedDataAnalysisNREL/Codes/windSpeedSimulation/windSpeedSimulation/testing_multivariate_stationarity.R')
 
 
 numStations <- 5
@@ -32,18 +33,14 @@ numObs <- 288
 numMonths <- 1
 numDays <- 1
 numSimulations <- 500
+month <- 1
+day <- 31
 
 alpha <- 0.05
 
 # reading files
-decompseData <- ReadingFiles(numStations, numObs, numMonths, numDays)
-
-# univariate stationary test
-for (i in 1 : ncol(decompseData)) {
-  
-}
-
-
+decompseData <- ReadingFiles(numStations, numObs, numMonths, numDays, month, day)
+test_stationarity(decompseData$residual, Boot = 30)
 
 # function returns change point locations
 changePoints <- cpt.locations.multi(decompseData$residual[1:288,c(1:numStations)],alpha)
