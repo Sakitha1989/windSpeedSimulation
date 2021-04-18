@@ -425,7 +425,7 @@ kz=cbind(statistik_wb,qchisq(1-0.05,c(1:m_max,m_opt_wb)*d*(d+1)))
 #print(kz)
 #return(1-pchisq(statistik[m_max+1],df=m_opt*d*(d+1)))
 
-lagsc = 1
+lagsc = 5
 return(1-pchisq(statistik_wb[lagsc],df=lagsc*d*(d+1)))
 
 

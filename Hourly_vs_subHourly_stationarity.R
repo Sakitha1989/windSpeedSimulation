@@ -1,12 +1,13 @@
+library(zoo)
+
 multiSubHourlyPvalue <- vector("numeric", 1)
 multiHourlyPvalue <- vector("numeric", 1)
 
-hourlyResiduals <- matrix(0, 24, 5)
 uniSubHourlyPvalue <- matrix(0, 12, 5)
 uniHourlyPvalue <- matrix(0, 12, 5)
 
 # selected days from Jan to Dec
-days <- c(31,17,5,24,27,13,9,19,21,8,12,24)
+days <- c(21,17,5,22,17,13,9,19,21,8,12,24)
 
 numStations <- 5
 numObs <- 288
@@ -20,24 +21,30 @@ for(i in 1:12){
   # multi-variate test for sub-hourly data
   multiSubHourlyPvalue[i] <- test_stationarity(subHourlyData$residual, Boot = 30)
   
-  for (j in 1:ncol(subHourlyData$residual)) {
-    
-    # univariate test for sub-hourly data
-    uniSubHourlyPvalue[i,j] <- stationarity.testRI_updated(subHourlyData$residual[,j], 1, 3)
-    
-    #calculating hourly data
-    hourlyData <- rollapply(subHourlyData$original[,j], 12, mean, by = 12)
-    Hdfr <-  data.frame(hourlyData,1:length(hourlyData))
-    names(Hdfr) <-  c("speed","time")
-    hourlyModel = loess(speed~-1+time , data = Hdfr)
-    hourlyResiduals[,j] <-  hourlyModel$residual
-    
-    # univariate test for hourly data
-    uniHourlyPvalue[i,j] <- stationarity.testRI_updated(hourlyResiduals[,j], 1, 3)
+  # averaging for hourly data
+  hourlyData <- rollapply(subHourlyData$original, 12, mean, by = 12)
+  for (d in 1:6) {
+    tempSubHourlyData <- ReadingFiles(numStations, numObs, numMonths, numDays, i, (days[i]+d))
+    hourlyData <- rbind(hourlyData, rollapply(tempSubHourlyData$original, 12, mean, by = 12))
   }
   
+    for (j in 1:ncol(subHourlyData$residual)) {
+      
+      # univariate test for sub-hourly data
+      uniSubHourlyPvalue[i,j] <- stationarity.testRI_updated(subHourlyData$residual[,j], 1, 3)
+      
+      #calculating hourly data
+      Hdfr <-  data.frame(hourlyData[,j],1:length(hourlyData[,j]))
+      names(Hdfr) <-  c("speed","time")
+      hourlyModel = loess(speed~-1+time , data = Hdfr)
+      hourlyResiduals[,j] <-  hourlyModel$residual
+      
+      # univariate test for hourly data
+      uniHourlyPvalue[i,j] <- stationarity.testRI_updated(hourlyResiduals[,j], 1, 3)
+    }
+  
   # multi-variate test for sub-hourly data
-  multiHourlyPvalue[i] <- test_stationarity(hourlyResiduals[,1:2], Boot = 30)
+  multiHourlyPvalue[i] <- test_stationarity(hourlyResiduals, Boot = 30)
 }
 
 #############################################################################################################
